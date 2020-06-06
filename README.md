@@ -1,2 +1,0 @@
-# DeckGLBitmapLayer
-Created with CodeSandbox
