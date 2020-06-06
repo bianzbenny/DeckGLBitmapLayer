@@ -1,4 +1,5 @@
-import { LineLayer, COORDINATE_SYSTEM } from "@deck.gl/layers";
+import { LineLayer } from "@deck.gl/layers";
+import { COORDINATE_SYSTEM } from "@deck.gl/core";
 
 //min[x, y], max[x, y] corners of bbox
 //conver ot lines
@@ -20,7 +21,7 @@ export default props => {
 
   return new LineLayer({
     id,
-    //coordinateSystem: COORDINATE_SYSTEM.CARTESIAN,
+    coordinateSystem: COORDINATE_SYSTEM.CARTESIAN,
     //visible:false,
     modelMatrix: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
     data: data,

@@ -1,27 +1,32 @@
 import React, { useState } from "react";
 import DeckGL from "@deck.gl/react";
-import { OrthographicView, OrbitView } from "@deck.gl/core";
+import { OrthographicView, OrbitView, COORDINATE_SYSTEM } from "@deck.gl/core";
 import { BitmapLayer } from "@deck.gl/layers";
 import "./styles.css";
 
 import boundingBoxLayer from "./boundingBoxLayer";
+import center_zoom from "./utils";
 
 export default props => {
   //setup control panel
   //v2d flag to show 2d or 3d view
 
   //console.log(`scale=${scale} zoom=${zoomLevel} target:${target} `);
+  const [min, max] = [[-122.519, 37.7045], [-122.355, 37.829]];
+  const [width, height] = [800, 600];
+  const { scale, zoom, target } = center_zoom({ min, max, width, height });
+  console.log(`zoom: ${zoom} target: ${target}`);
+  //const [longitude, latitude] = [-122.431297, 37.773972];
   const [viewport] = useState({
-    //target: [target[0], target[1], 0], //world coords of view center, should be bbox center
-    //position: [width / 2, height / 2, 0], //camera position
-    //position: [target[0], target[1], 0],
-    latitude: 37.773972,
+    target, //: [longitude, latitude, 0], //world coords of view center, should be bbox center
+    //position: [longitude, latitude, 0],
+    /* latitude: 37.773972,
     longitude: -122.431297,
     pitch: 50,
-    bearing: 0,
-    zoom: 10,
-    width: 800,
-    height: 600,
+    bearing: 0, */
+    zoom,
+    width,
+    height,
     rotationX: 0
   });
 
@@ -34,13 +39,13 @@ export default props => {
     rotationX: 0
   });
 
-  const [min, max] = [[-122.519, 37.7045], [-122.355, 37.829]];
   const layers = [
     boundingBoxLayer({ min, max }),
     new BitmapLayer({
       bounds: [...min, ...max],
       image:
         "https://raw.githubusercontent.com/uber-common/deck.gl-data/master/website/sf-districts.png",
+      coordinateSystem: COORDINATE_SYSTEM.CARTESIAN,
       desaturate: 0,
       transparentColor: [0, 0, 0, 0],
       tintColor: [255, 255, 255]
@@ -48,10 +53,10 @@ export default props => {
   ];
   return (
     <>
-      <div>Test deck.gl bitmap layer</div>
+      <div>Test deck.gl bitmap layer, coordinateSystem and views</div>
       <div id="maps">
         <DeckGL
-          //views={}
+          views={views3d}
           //views={v2d ? views2d : views3d}
           initialViewState={viewport}
           controller={true}
